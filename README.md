@@ -4,7 +4,7 @@ Build
 
 ```
 docker build -t avral_convertation:latest .
-docker run --rm -t -i -v C:/Users/AntanWind/avral_convertation:/avral_convertation avral_convertation:latest /bin/bash
+docker run --rm -t -i -v ${PWD}:/avral_convertation avral_convertation:latest /bin/bash
 ```
 
 
