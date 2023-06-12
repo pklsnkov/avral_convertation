@@ -50,6 +50,7 @@ def get_args():
 
     return args
 
+
 # Points must have Polygon or Point data type
 def crs_transform(points, crs):
     global transformed_points
@@ -84,35 +85,70 @@ def determinate_type_of_stroke(coordinates):
     return pattern
 
 
+# def decimal_coordinates(deg, minute, sec):
+#     if sec == '':
+#         sec = 0.0
+#     if minute == '':
+#         minute = 0.0
+
+#     if float(deg) > 180 or len(deg) >= 4:
+#         deg_int = str(round(float(deg)))
+#         if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
+#             deg = (float(deg) // 10)
+#         else:
+#             sec = minute
+#             if len(deg_int) == 4:
+#                 deg, minute = deg[:2], deg[2:]
+#             elif len(deg_int) == 5:
+#                 deg, minute = deg[:2], deg[3:]
+
+#     if float(minute) > 60 or len(minute) >= 4:
+#         if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
+#             minute = minute[2:]
+#         else:
+#             minute_int = str(round(float(minute)))
+
+#             if len(minute_int) == 4:
+#                 minute, sec = minute[:2], minute[2:]
+#             elif len(minute_int) == 5:
+#                 minute, sec = minute[:2], minute[3:]
+
+#     return float(deg) + (float(minute) / 60) + (float(sec) / 3600)
+
+
 def decimal_coordinates(deg, minute, sec):
     if sec == '':
         sec = 0.0
     if minute == '':
         minute = 0.0
 
-    if float(deg) > 180 or len(deg) >= 4:
-        deg_int = str(round(float(deg)))
-        if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
-            deg = (float(deg) // 10)
+    deg = float(deg)
+    minute = float(minute)
+    sec = float(sec)
+
+    if deg > 180 or len(str(int(deg))) >= 4:
+        deg = round(deg)
+        if deg != 0 and minute != 0 and sec != 0:
+            deg = deg // 10
         else:
             sec = minute
+            deg_int = str(int(deg))
             if len(deg_int) == 4:
-                deg, minute = deg[:2], deg[2:]
+                deg, minute = int(deg_str[:2]), int(deg_str[2:])
             elif len(deg_int) == 5:
-                deg, minute = deg[:2], deg[3:]
+                deg, minute = int(deg_str[:2]), int(deg_str[3:])
 
-    if float(minute) > 60 or len(minute) >= 4:
-        if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
-            minute = minute[2:]
+    if minute > 60 or len(str(int(minute))) >= 4:
+        if deg != 0 and minute != 0 and sec != 0:
+            minute = minute % 100
         else:
-            minute_int = str(round(float(minute)))
-
+            minute_int = str(int(minute))
             if len(minute_int) == 4:
-                minute, sec = minute[:2], minute[2:]
+                minute, sec = int(minute_str[:2]), int(minute_str[2:])
             elif len(minute_int) == 5:
-                minute, sec = minute[:2], minute[3:]
+                minute, sec = int(minute_str[:2]), int(minute_str[3:])
 
-    return float(deg) + (float(minute) / 60) + (float(sec) / 3600)
+    return deg + (minute / 60) + (sec / 3600)
 
 
 def separation_coordinates(stroke, separator):
