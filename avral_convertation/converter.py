@@ -23,12 +23,9 @@ KEYWORDS = {
 }
 
 RE_EXP = {
-    'pattern_radius':
-        r"(\d+(?:\.\d+)?) (\w+)",
-    'pattern_coordinates':
-        r"ш=(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*\D+(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*[^.]",
-    'pattern_coordinates_without_numbers':
-        r"(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*\D+(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*"
+    'pattern_radius': r"(\d+(?:\.\d+)?) (\w+)",
+    'pattern_coordinates': r"ш=(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*\D+(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*[^.]",
+    'pattern_coordinates_without_numbers': r"(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*\D+(\d+)[^.](\d+(?:\.\d+)?)[^.](\d+(?:\.\d+)?)*"
 }
 
 CRS_POLYGON = {
@@ -36,15 +33,15 @@ CRS_POLYGON = {
     'ск-42': 'EPSG:4284'
 }
 
+DRIVERS = {
+    'geopackage': 'GPKG'
+}
+
 
 def get_args():
     epilog = '''Sample: '''
-    epilog +=  '''
-    
-    python grid.py -s 100 src.geojson dst.gpkg 
-    Grid calculate in meters, using WGS84 / UTM projection. Boundary layer can contains features for different place of globe.
-     '''
-    p = argparse.ArgumentParser(description="Generate grid of points or squares into source polygons", epilog=epilog)
+    epilog +=  ''' '''
+    p = argparse.ArgumentParser(description=" ", epilog=epilog)
 
     p.add_argument('--input_file', help='Input file path.')
     p.add_argument('--output_file', help='Output file path.')
@@ -296,4 +293,4 @@ for i, row in excel_dataframe.iterrows():
 
 geopackage_geodataframe.crs = CRS.from_string(CRS_POLYGON['wgs-84'])
 
-geopackage_geodataframe.to_file(output_file, driver='GPKG', dtype={'geometry': 'Geometry'})
+geopackage_geodataframe.to_file(output_file, driver=DRIVERS['geopackage'], dtype={'geometry': 'Geometry'})
