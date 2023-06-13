@@ -23,14 +23,12 @@ class Converter(AvralOperation):
         )
 
     def _do_work(self):
-        # Получение пути к файлу Excel из входных параметров
+        
         input_file = self.getInput("input_file")
 
-        # Проверка существования файла
         if not os.path.isfile(input_file):
             raise OperationException("Input file does not exist")
 
-        # Формирование команды для вызова скрипта converter.py
         export_file = "result.gpkg"
         cmd = "python " + os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "converter.py"
@@ -41,10 +39,8 @@ class Converter(AvralOperation):
             output_file=export_file,
         )
 
-        # Выполнение команды
         os.system(cmd)
 
-        # Установка выходного файла
         self.setOutput("output_file", export_file)
 
         return ()
