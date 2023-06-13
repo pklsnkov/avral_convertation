@@ -85,71 +85,35 @@ def determinate_type_of_stroke(coordinates):
     return pattern
 
 
-# def decimal_coordinates(deg, minute, sec):
-#     if sec == '':
-#         sec = 0.0
-#     if minute == '':
-#         minute = 0.0
-
-#     if float(deg) > 180 or len(deg) >= 4:
-#         deg_int = str(round(float(deg)))
-#         if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
-#             deg = (float(deg) // 10)
-#         else:
-#             sec = minute
-#             if len(deg_int) == 4:
-#                 deg, minute = deg[:2], deg[2:]
-#             elif len(deg_int) == 5:
-#                 deg, minute = deg[:2], deg[3:]
-
-#     if float(minute) > 60 or len(minute) >= 4:
-#         if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
-#             minute = minute[2:]
-#         else:
-#             minute_int = str(round(float(minute)))
-
-#             if len(minute_int) == 4:
-#                 minute, sec = minute[:2], minute[2:]
-#             elif len(minute_int) == 5:
-#                 minute, sec = minute[:2], minute[3:]
-
-#     return float(deg) + (float(minute) / 60) + (float(sec) / 3600)
-
-
 def decimal_coordinates(deg, minute, sec):
     if sec == '':
         sec = 0.0
     if minute == '':
         minute = 0.0
 
-    deg = float(deg)
-    minute = float(minute)
-    sec = float(sec)
-
-    if deg > 180 or len(str(int(deg))) >= 4:
-        deg = round(deg)
-        if deg != 0 and minute != 0 and sec != 0:
-            deg = deg // 10
+    if float(deg) > 180 or len(deg) >= 4:
+        deg_int = str(round(float(deg)))
+        if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
+            deg = (float(deg) // 10)
         else:
             sec = minute
-            deg_int = str(int(deg))
             if len(deg_int) == 4:
-                deg, minute = int(deg_str[:2]), int(deg_str[2:])
+                deg, minute = deg[:2], deg[2:]
             elif len(deg_int) == 5:
-                deg, minute = int(deg_str[:2]), int(deg_str[3:])
+                deg, minute = deg[:2], deg[3:]
 
-    if minute > 60 or len(str(int(minute))) >= 4:
-        if deg != 0 and minute != 0 and sec != 0:
-            minute = minute % 100
+    if float(minute) > 60 or len(minute) >= 4:
+        if float(deg) != 0 and float(minute) != 0 and float(sec) != 0:
+            minute = minute[2:]
         else:
-            minute_int = str(int(minute))
+            minute_int = str(round(float(minute)))
+
             if len(minute_int) == 4:
-                minute, sec = int(minute_str[:2]), int(minute_str[2:])
+                minute, sec = minute[:2], minute[2:]
             elif len(minute_int) == 5:
-                minute, sec = int(minute_str[:2]), int(minute_str[3:])
+                minute, sec = minute[:2], minute[3:]
 
-    return deg + (minute / 60) + (sec / 3600)
-
+    return float(deg) + (float(minute) / 60) + (float(sec) / 3600)
 
 def separation_coordinates(stroke, separator):
     stroke = stroke.split(separator)
@@ -266,14 +230,15 @@ for i, row in excel_dataframe.iterrows():
         pattern_radius = RE_EXP['pattern_radius']
         radius_match = re.search(pattern_radius, coords_curr)
         if radius_match:
-            if KEYWORDS['морская миля'] in radius_match.group(2):
-                radius = float(radius_match.group(1)) * 1852
-            elif KEYWORDS['кабельтов'] in radius_match.group(2):
-                radius = float(radius_match.group(1)) * 185.2
-            elif KEYWORDS['км'] in radius_match.group(2):
-                radius = float(radius_match.group(1)) * 1000
-            elif KEYWORDS['м'] in radius_match.group(2):
-                radius = float(radius_match.group(1))
+            scale_factors = {
+                KEYWORDS['морская миля']: 1852,
+                KEYWORDS['кабельтов']: 185.2,
+                KEYWORDS['км']: 1000,
+                KEYWORDS['м']: 1
+            }
+            scale_keyword = radius_match.group(2)
+            if scale_keyword in scale_factors:
+                radius = float(radius_match.group(1)) * scale_factors[scale_keyword]
 
         coords_curr = coords_curr.replace(' ', '')
 
