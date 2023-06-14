@@ -11,8 +11,7 @@ docker run --rm -t -i -v ${PWD}:/avral_convertation avral_convertation:latest /b
 Run for debug in container
 
 ```
-cd avral_converter
+cd /avral_convertation
 pip3 install --no-cache-dir /opt/avral_convertation
-pip install geopandas transliterate openpyxl
-avral-exec --debug convert source.xlsx
+avral-exec --debug convert /avral_convertation/examples/source.xlsx
 ```
