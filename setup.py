@@ -6,6 +6,9 @@ requires = [
     'avral',
     'argparse',
     'shapely',
+    'geopandas',
+    'transliterate',
+    'openpyxl',
 ]
 
 setup(
